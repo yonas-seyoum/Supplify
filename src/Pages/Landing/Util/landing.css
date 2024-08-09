@@ -1,0 +1,66 @@
+:root {
+  --bgColor: rgb(15, 15, 15);
+}
+
+.landing {
+  display: grid;
+  grid-template-rows: repeat(3, auto);
+  background-color: #38322e;
+}
+
+.hero {
+  height: 100vh;
+  border-radius: 0 0 0 50%;
+  background-color: rgb(15, 15, 15);
+  box-shadow: 3px 3px 3px 2.5px rgba(0, 0, 0, 0.75);
+}
+
+.products {
+  /* border: 1px solid black; */
+  height: 800px;
+}
+
+.partners {
+  background-color: white;
+  height: 200px;
+}
+
+.footer {
+  background-color: var(--bgColor);
+  box-shadow: 3px 3px 3px 2.5px rgba(0, 0, 0, 0.75);
+  height: 10em;
+}
+
+.footer-container {
+  height: 100%;
+  color: white;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.socials {
+  display: flex;
+  /* flex-direction: column; */
+}
+
+/* .footer-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
+
+.footer-container > div {
+  outline: 1px solid red;
+}
+
+.light {
+  background-color: aliceblue;
+}
+
+.dark {
+  background-color: black;
+}
