@@ -22,11 +22,14 @@ export default function LandingPage() {
               <span className="text-xl font-bold text-blue-600">SuppliFy</span>
             </div>
             <div className="flex items-center space-x-4">
-              <Link href="/login" className="text-gray-600 hover:text-gray-900">
+              <Link
+                href="/auth/signin"
+                className="text-gray-600 hover:text-gray-900"
+              >
                 Login
               </Link>
               <Link
-                href="/signup"
+                href="auth//signup"
                 className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
               >
                 Sign Up
@@ -48,14 +51,14 @@ export default function LandingPage() {
             </p>
             <div className="flex justify-center space-x-4">
               <Link
-                href="/signup"
+                href="auth/signup"
                 className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 flex items-center"
               >
                 Get Started
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
               <Link
-                href="/login"
+                href="auth/signin"
                 className="border border-gray-300 text-gray-700 px-6 py-3 rounded-md hover:bg-gray-50"
               >
                 Live Demo
@@ -126,13 +129,13 @@ export default function LandingPage() {
           </p>
           <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row justify-center gap-4">
             <Link
-              href="/signup"
+              href="/auth/signup"
               className="bg-white text-blue-600 px-8 py-4 text-lg font-medium rounded-lg hover:bg-blue-50 transition"
             >
               Start Free Trial
             </Link>
             <Link
-              href="/login"
+              href="auth/signin"
               className="bg-transparent border-2 border-white text-white px-8 py-4 text-lg font-medium rounded-lg hover:bg-white hover:text-blue-600 transition"
             >
               Explore Features
