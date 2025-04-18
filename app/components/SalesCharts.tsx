@@ -1,18 +1,86 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Calendar, ChevronDown } from "lucide-react";
-import { monthlySalesData, categorySalesData } from "../utils/constants/sales";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  PointElement,
+  LineElement,
+} from "chart.js";
+import { Bar, Line } from "react-chartjs-2";
+import { categorySalesData } from "../utils/constants/sales";
+import { useDashboardContext } from "../context/dashboard.content.provider";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 interface SalesChartsProps {
   compact?: boolean;
 }
+
 export const SalesCharts: React.FC<SalesChartsProps> = ({
   compact = false,
 }) => {
   const [dateRange, setDateRange] = useState("30days");
 
-  const maxSales = Math.max(...monthlySalesData.map((d) => d.sales));
+  const { data } = useDashboardContext();
+  const { salesOverview } = data;
+
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const { sortedLabels, chartDataSet } = useMemo(() => {
+    const sorted = [...salesOverview].sort(
+      (a, b) => months.indexOf(a.month) - months.indexOf(b.month)
+    );
+
+    const labels = months;
+    const data = sorted.map((item) => item.revenue);
+
+    return {
+      sortedLabels: labels,
+      chartDataSet: data,
+    };
+  }, [salesOverview]);
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: false,
+      },
+      legend: {
+        display: false,
+      },
+    },
+  };
+
   return (
     <div className="space-y-6">
       {!compact && (
@@ -43,7 +111,7 @@ export const SalesCharts: React.FC<SalesChartsProps> = ({
         } gap-6`}
       >
         <div
-          className={`bg-white p-6 rounded-lg shadow-sm border border-gray-100 ${
+          className={`bg-white p-6 rounded-lg border border-gray-100 ${
             compact ? "" : "lg:col-span-2"
           }`}
         >
@@ -64,21 +132,22 @@ export const SalesCharts: React.FC<SalesChartsProps> = ({
               </select>
             )}
           </div>
-          <div className="h-64 relative">
-            <div className="absolute inset-0 flex items-end">
-              {monthlySalesData.map((data, index) => (
-                <div key={index} className="flex-1 flex flex-col items-center">
-                  <div
-                    className="w-full max-w-[30px] bg-blue-500 rounded-t-sm mx-auto"
-                    style={{
-                      height: `${(data.sales / maxSales) * 100}%`,
-                    }}
-                  ></div>
-                  <div className="text-xs text-gray-600 mt-2">{data.month}</div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <Line
+            options={chartOptions}
+            data={{
+              labels: sortedLabels,
+              datasets: [
+                {
+                  data: chartDataSet,
+                  borderColor: "#3b82f6",
+                  backgroundColor: "rgba(59, 130, 246, 0.2)",
+                  tension: 0.4,
+                  fill: true,
+                },
+              ],
+            }}
+          />
+
           <div className="flex items-center justify-center mt-4 space-x-6">
             <div className="flex items-center">
               <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
