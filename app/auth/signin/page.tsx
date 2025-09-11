@@ -1,10 +1,13 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
 import { Mail, Lock } from "lucide-react";
 import {
   signInPageTypeography,
   SignInPageTypeography,
 } from "@/app/utils/constants/auth";
+import { useAuthContext } from "@/app/context/AuthContext";
 export default function LoginPage() {
   const {
     header,
@@ -19,6 +22,18 @@ export default function LoginPage() {
     google,
     microsoft,
   } = signInPageTypeography;
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const { login: signIn, OAuthLogin } = useAuthContext();
+
+  const handleLogin = async () => {
+    await signIn(formData.email, formData.password);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -26,7 +41,7 @@ export default function LoginPage() {
           {header}
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          {query}{" "}
+          {query}
           <Link
             href="/auth/signup"
             className="font-medium text-blue-600 hover:text-blue-500"
@@ -37,7 +52,7 @@ export default function LoginPage() {
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6">
+          <div className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -57,6 +72,9 @@ export default function LoginPage() {
                   required
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="you@example.com"
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -79,6 +97,9 @@ export default function LoginPage() {
                   required
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="••••••••"
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -107,13 +128,14 @@ export default function LoginPage() {
               </div>
             </div>
             <div>
-              <Link href={"/dashboard"}>
-                <button className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                  {login}
-                </button>
-              </Link>
+              <button
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                onClick={handleLogin}
+              >
+                {login}
+              </button>
             </div>
-          </form>
+          </div>
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
@@ -125,18 +147,13 @@ export default function LoginPage() {
                 </span>
               </div>
             </div>
-            <div className="mt-6 grid grid-cols-2 gap-3">
+            <div className="mt-6 grid grid-cols-1 gap-3">
               <button
                 type="button"
                 className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                onClick={OAuthLogin}
               >
                 {google}
-              </button>
-              <button
-                type="button"
-                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-              >
-                {microsoft}
               </button>
             </div>
           </div>
