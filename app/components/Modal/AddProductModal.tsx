@@ -1,7 +1,9 @@
-"use state";
+"use client";
 
 import React, { useState } from "react";
-import { X, Upload, Plus } from "lucide-react";
+import { X, Loader2 } from "lucide-react";
+import { useDashboardContext } from "@/app/context/DashboardContext";
+import { Product } from "@/app/utils/constants/products";
 interface AddProductModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -12,15 +14,14 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
   onClose,
   onSubmit,
 }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Omit<Product, "id">>({
     name: "",
     description: "",
-    category: "",
-    price: "",
-    quantity: "",
-    threshold: "",
-    sku: "",
-    barcode: "",
+    category: "Electronics",
+    price: 0,
+    quantity: 0,
+    threshold: 0,
+    barcode: 0,
   });
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,6 +29,32 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
     onClose();
   };
   if (!isOpen) return null;
+
+  const { addProduct } = useDashboardContext();
+
+  // const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const handleAddProduct = () => {
+    // setIsSubmitting(true);
+    try {
+      addProduct({
+        id: 0,
+        name: formData.name,
+        description: formData.description,
+        category: formData.category,
+        price: formData.price,
+        quantity: formData.quantity,
+        threshold: formData.threshold,
+        barcode: formData.barcode,
+      });
+    } catch (error: any) {
+      // setIsSubmitting(false);
+      throw new Error(error.message);
+    } finally {
+      // setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="fixed inset-0 bg-black/50 transition-opacity" />
@@ -77,7 +104,11 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          category: e.target.value,
+                          category: e.target.value as
+                            | "Electronics"
+                            | "Furniture"
+                            | "Health"
+                            | "Beauty",
                         })
                       }
                     >
@@ -123,7 +154,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                         onChange={(e) =>
                           setFormData({
                             ...formData,
-                            price: e.target.value,
+                            price: parseFloat(e.target.value),
                           })
                         }
                       />
@@ -141,29 +172,13 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          quantity: e.target.value,
+                          quantity: parseFloat(e.target.value),
                         })
                       }
                     />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      SKU
-                    </label>
-                    <input
-                      type="text"
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                      value={formData.sku}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          sku: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
                       Barcode
@@ -175,62 +190,38 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          barcode: e.target.value,
+                          barcode: parseInt(e.target.value),
+                        })
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Low Stock Threshold
+                    </label>
+                    <input
+                      type="number"
+                      required
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      value={formData.threshold}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          threshold: parseInt(e.target.value),
                         })
                       }
                     />
                   </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Low Stock Threshold
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    value={formData.threshold}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        threshold: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="mt-4">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Product Image
-                  </label>
-                  <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                    <div className="space-y-1 text-center">
-                      <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                      <div className="flex text-sm text-gray-600">
-                        <label
-                          htmlFor="file-upload"
-                          className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
-                        >
-                          <span>Upload a file</span>
-                          <input
-                            id="file-upload"
-                            name="file-upload"
-                            type="file"
-                            className="sr-only"
-                          />
-                        </label>
-                        <p className="pl-1">or drag and drop</p>
-                      </div>
-                      <p className="text-xs text-gray-500">
-                        PNG, JPG, GIF up to 10MB
-                      </p>
-                    </div>
-                  </div>
-                </div>
+
                 <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                   <button
                     type="submit"
-                    className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
+                    className="inline-flex w-full items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
+                    onClick={handleAddProduct}
                   >
+                    <Loader2  className="px-2 animate-spin"/>
                     Add Product
                   </button>
                   <button
