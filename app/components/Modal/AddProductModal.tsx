@@ -28,14 +28,10 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
     onSubmit(formData);
     onClose();
   };
-  if (!isOpen) return null;
 
   const { addProduct } = useDashboardContext();
 
-  // const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
   const handleAddProduct = () => {
-    // setIsSubmitting(true);
     try {
       addProduct({
         id: 0,
@@ -48,12 +44,12 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
         barcode: formData.barcode,
       });
     } catch (error: any) {
-      // setIsSubmitting(false);
       throw new Error(error.message);
     } finally {
-      // setIsSubmitting(false);
     }
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
@@ -221,7 +217,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                     className="inline-flex w-full items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
                     onClick={handleAddProduct}
                   >
-                    <Loader2  className="px-2 animate-spin"/>
+                    <Loader2 className="px-2 animate-spin" />
                     Add Product
                   </button>
                   <button
