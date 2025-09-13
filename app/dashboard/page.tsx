@@ -1,13 +1,19 @@
+"use client";
+
 import React from "react";
 
 import { SalesCharts } from "../components/SalesCharts";
 import { StockAlerts } from "../components/StockAlerts";
 import { stats } from "../utils/constants/dashboard";
 import { DashboardTypography } from "../utils/constants/dashboard";
+import { useDashboardContext } from "../context/DashboardContext";
+import Card from "../components/Card";
 
 export default function Dashboard() {
   const { header, dayFilters, exportLabel, salesOverview, stockAlerts } =
     DashboardTypography;
+  const { dashboardData } = useDashboardContext();
+  const { numberOfSuppliers, numerOfProducts, lowStockItems } = dashboardData;
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -25,34 +31,24 @@ export default function Dashboard() {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {stats.map((stat, index) => (
-          <div
-            key={index}
-            className="bg-white p-6 rounded-lg shadow-sm border border-gray-100"
-          >
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm font-medium text-gray-500">
-                  {stat.title}
-                </p>
-                <p className="mt-2 text-2xl font-semibold text-gray-900">
-                  {stat.value}
-                </p>
-              </div>
-              <div className="p-2 rounded-md bg-gray-50">{stat.icon}</div>
-            </div>
-            <div className="mt-4">
-              <span
-                className={`inline-flex items-center text-xs font-medium ${
-                  stat.positive ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {stat.change}
-                <span className="ml-1">from previous period</span>
-              </span>
-            </div>
-          </div>
-        ))}
+        <Card
+          title="Total Products"
+          value={numerOfProducts}
+          icon={stats[0].icon}
+        />
+        <Card
+          title="Low Stock Items"
+          value={lowStockItems}
+          icon={stats[1].icon}
+        />
+        <Card title="Monthly Sales" value={`$${48294}`} icon={stats[2].icon} />
+        <Card
+          title="Active Suppliers"
+          value={numberOfSuppliers}
+          icon={stats[3].icon}
+        />
+        <Card title="Revenue" value={`$${12894}`} icon={stats[4].icon} />
+        <Card title="Orders" value={562} icon={stats[5].icon} />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-sm border border-gray-100">
