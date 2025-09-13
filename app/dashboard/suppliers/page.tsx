@@ -3,8 +3,9 @@
 import React, { useState } from "react";
 import { Search, Plus, Mail, Phone, MapPin, Edit, Trash2 } from "lucide-react";
 import { AddSupplierModal } from "@/app/components/Modal/AddSupplierModal";
-import { suppliers } from "@/app/utils/constants/suppliers";
+import { useDashboardContext } from "@/app/context/DashboardContext";
 export default function SupplierTable() {
+  const { suppliers, deleteSupplier } = useDashboardContext();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -110,7 +111,10 @@ export default function SupplierTable() {
                       <button className="p-1 text-blue-600 hover:text-blue-800">
                         <Edit size={18} />
                       </button>
-                      <button className="p-1 text-red-600 hover:text-red-800">
+                      <button
+                        className="p-1 text-red-600 hover:text-red-800"
+                        onClick={() => deleteSupplier(supplier.id)}
+                      >
                         <Trash2 size={18} />
                       </button>
                     </div>

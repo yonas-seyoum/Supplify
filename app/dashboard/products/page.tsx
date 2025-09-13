@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Search, Filter, ArrowUpDown, Plus, Edit, Trash2 } from "lucide-react";
 import { AddProductModal } from "@/app/components/Modal/AddProductModal";
-import { products } from "@/app/utils/constants/products";
+import { useDashboardContext } from "@/app/context/DashboardContext";
 
 export default function ProductTable() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,6 +16,7 @@ export default function ProductTable() {
   const handleAddProductModalState = () => {
     setIsAddProductModalOpen(!isAddProductModalOpen);
   };
+  const { products, deleteProduct } = useDashboardContext();
 
   // Get unique categories
   const categories = [
@@ -177,7 +178,10 @@ export default function ProductTable() {
                       <button className="p-1 text-blue-600 hover:text-blue-800">
                         <Edit size={18} />
                       </button>
-                      <button className="p-1 text-red-600 hover:text-red-800">
+                      <button
+                        className="p-1 text-red-600 hover:text-red-800"
+                        onClick={() => deleteProduct(product.id)}
+                      >
                         <Trash2 size={18} />
                       </button>
                     </div>
