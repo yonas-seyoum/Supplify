@@ -4,6 +4,8 @@ export type Product = {
   description: string;
   quantity: number;
   price: number;
+  threshold: number;
+  barcode: number;
   category: "Electronics" | "Furniture" | "Health" | "Beauty";
 };
 
@@ -14,6 +16,8 @@ export const products: Product[] = [
     description: "Noise-cancelling Bluetooth headphones",
     quantity: 45,
     price: 89.99,
+    threshold: 4,
+    barcode: 777,
     category: "Electronics",
   },
   {
@@ -22,6 +26,8 @@ export const products: Product[] = [
     description: "Ergonomic mesh office chair",
     quantity: 12,
     price: 199.99,
+    threshold: 4,
+    barcode: 777,
     category: "Furniture",
   },
   {
@@ -30,6 +36,8 @@ export const products: Product[] = [
     description: "Whey protein isolate, chocolate flavor",
     quantity: 50,
     price: 29.99,
+    threshold: 4,
+    barcode: 777,
     category: "Health",
   },
   {
@@ -38,6 +46,8 @@ export const products: Product[] = [
     description: "Daily facial moisturizer with SPF",
     quantity: 8,
     price: 24.99,
+    threshold: 4,
+    barcode: 777,
     category: "Beauty",
   },
   {
@@ -46,6 +56,8 @@ export const products: Product[] = [
     description: '6.7" display, 128GB storage',
     quantity: 23,
     price: 799.99,
+    threshold: 4,
+    barcode: 777,
     category: "Electronics",
   },
   {
@@ -54,6 +66,8 @@ export const products: Product[] = [
     description: "Adjustable LED desk lamp",
     quantity: 34,
     price: 39.99,
+    threshold: 4,
+    barcode: 777,
     category: "Furniture",
   },
   {
@@ -62,6 +76,8 @@ export const products: Product[] = [
     description: "Anti-aging facial serum",
     quantity: 5,
     price: 19.99,
+    threshold: 4,
+    barcode: 777,
     category: "Beauty",
   },
   {
@@ -70,6 +86,8 @@ export const products: Product[] = [
     description: "Bluetooth mechanical keyboard",
     quantity: 18,
     price: 69.99,
+    threshold: 4,
+    barcode: 777,
     category: "Electronics",
   },
 ];
