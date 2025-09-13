@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { X, Mail, Phone, MapPin, Building2, Globe } from "lucide-react";
+import { useDashboardContext } from "@/app/context/DashboardContext";
+import { Supplier } from "@/app/utils/constants/suppliers";
 interface AddSupplierModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -10,9 +12,11 @@ export const AddSupplierModal: React.FC<AddSupplierModalProps> = ({
   onClose,
   onSubmit,
 }) => {
-  const [formData, setFormData] = useState({
-    companyName: "",
-    contactName: "",
+  const { addSupplier } = useDashboardContext();
+
+  const [formData, setFormData] = useState<Omit<Supplier, 'id'>>({
+    name: "",
+    contact: "",
     email: "",
     phone: "",
     address: "",
@@ -21,10 +25,32 @@ export const AddSupplierModal: React.FC<AddSupplierModalProps> = ({
     zipCode: "",
     country: "",
     website: "",
-    category: "",
+    category: "Electronics",
     paymentTerms: "30",
     notes: "",
+    status: "active",
   });
+
+  const handleAddSupplier = () => {
+    addSupplier({
+      id: 0,
+      name: formData.name,
+      contact: formData.contact,
+      email: formData.email,
+      phone: formData.phone,
+      address: formData.address,
+      city: formData.city,
+      state: formData.state,
+      zipCode: formData.zipCode,
+      country: formData.country,
+      website: formData.website,
+      paymentTerms: formData.paymentTerms,
+      notes: formData.notes,
+      category: formData.category,
+      status: "active",
+    });
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
@@ -67,11 +93,11 @@ export const AddSupplierModal: React.FC<AddSupplierModalProps> = ({
                         type="text"
                         required
                         className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        value={formData.companyName}
+                        value={formData.name}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
-                            companyName: e.target.value,
+                            name: e.target.value,
                           })
                         }
                       />
@@ -88,15 +114,15 @@ export const AddSupplierModal: React.FC<AddSupplierModalProps> = ({
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          category: e.target.value,
+                          category: e.target.value as "Electronics" | "Furniture" | "Health" | "Beauty",
                         })
                       }
                     >
                       <option value="">Select category</option>
                       <option value="Electronics">Electronics</option>
                       <option value="Furniture">Furniture</option>
-                      <option value="Office Supplies">Office Supplies</option>
-                      <option value="Raw Materials">Raw Materials</option>
+                      <option value="Health">Health</option>
+                      <option value="Beauty">Beauty</option>
                     </select>
                   </div>
                 </div>
@@ -115,11 +141,11 @@ export const AddSupplierModal: React.FC<AddSupplierModalProps> = ({
                       type="text"
                       required
                       className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                      value={formData.contactName}
+                      value={formData.contact}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          contactName: e.target.value,
+                          contact: e.target.value,
                         })
                       }
                     />
@@ -336,8 +362,8 @@ export const AddSupplierModal: React.FC<AddSupplierModalProps> = ({
               </div>
               <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                 <button
-                  type="submit"
                   className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
+                  onClick={handleAddSupplier}
                 >
                   Add Supplier
                 </button>
