@@ -2,13 +2,19 @@
 
 import React, { useState } from "react";
 import { ArrowUpDown, Filter } from "lucide-react";
-import { lowStockItems } from "../utils/constants/stocks";
+import { useDashboardContext } from "../context/DashboardContext";
 interface StockAlertsProps {
   compact?: boolean;
 }
 export const StockAlerts: React.FC<StockAlertsProps> = ({
   compact = false,
 }) => {
+  const { products } = useDashboardContext();
+
+  const lowStockItems = products.filter(
+    (item) => item.quantity <= item.threshold
+  );
+
   const [sortColumn, setSortColumn] = useState("name");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [alertFilter, setAlertFilter] = useState("all");
@@ -108,7 +114,7 @@ export const StockAlerts: React.FC<StockAlertsProps> = ({
             </thead>
             <tbody className="divide-y divide-gray-200">
               {displayItems.map((item) => {
-                const percentage = (item.quantity / item.maxQuantity) * 100;
+                const percentage = 1 * 100; //
                 const isCritical = item.quantity <= item.threshold / 2;
                 return (
                   <tr key={item.id} className="hover:bg-gray-50">
@@ -132,7 +138,7 @@ export const StockAlerts: React.FC<StockAlertsProps> = ({
                               isCritical ? "text-red-600" : "text-orange-500"
                             }`}
                           >
-                            {item.quantity} / {item.maxQuantity}
+                            {item.quantity / 12} {/*item.maxQuantity*/}
                           </span>
                           <span
                             className={`text-xs px-2 py-0.5 rounded-full ${
