@@ -2,6 +2,7 @@
 
 import React, { ReactNode, useState } from "react";
 import { Sidebar } from "../components/SideBar";
+import DashboardContextProvider from "../context/DashboardContext";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -20,7 +21,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           sidebarCollapsed ? "ml-16" : "ml-64"
         }`}
       >
-        <div className="p-6">{children}</div>
+        <div className="p-6">
+          <DashboardContextProvider>{children}</DashboardContextProvider>
+        </div>
       </main>
     </div>
   );
