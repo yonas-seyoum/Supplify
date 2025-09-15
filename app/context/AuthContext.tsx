@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 export interface AuthContext {
+  authLoading: boolean;
   user: User | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
@@ -47,6 +48,7 @@ export default function AuthContextProvider({
   const router = useRouter();
 
   const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -65,6 +67,7 @@ export default function AuthContextProvider({
 
   const login = async (email: string, password: string): Promise<void> => {
     try {
+      setAuthLoading(true);
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
@@ -82,6 +85,7 @@ export default function AuthContextProvider({
 
       router.push("/dashboard");
     } catch (error: any) {}
+    setAuthLoading(false);
   };
 
   const OAuthLogin = () => {
@@ -110,6 +114,7 @@ export default function AuthContextProvider({
     password: string
   ): Promise<void> => {
     try {
+      setAuthLoading(true);
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -129,6 +134,7 @@ export default function AuthContextProvider({
 
       router.push("/dashboard");
     } catch (error: any) {}
+    setAuthLoading(false);
   };
 
   const logout = async () => {
@@ -143,6 +149,7 @@ export default function AuthContextProvider({
   };
 
   const value = {
+    authLoading,
     user,
     isAuthenticated: !!user,
     OAuthLogin,
