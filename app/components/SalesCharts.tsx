@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Calendar, ChevronDown } from "lucide-react";
-import { monthlySalesData, categorySalesData } from "../utils/constants/sales";
+import { useDashboardContext } from "../context/DashboardContext";
 
 interface SalesChartsProps {
   compact?: boolean;
@@ -12,7 +12,9 @@ export const SalesCharts: React.FC<SalesChartsProps> = ({
 }) => {
   const [dateRange, setDateRange] = useState("30days");
 
-  const maxSales = Math.max(...monthlySalesData.map((d) => d.sales));
+  const { salesData } = useDashboardContext();
+  const { sales, totalRevenue, totalOrders, totalSalesByCategory } = salesData;
+  
   return (
     <div className="space-y-6">
       {!compact && (
@@ -66,12 +68,15 @@ export const SalesCharts: React.FC<SalesChartsProps> = ({
           </div>
           <div className="h-64 relative">
             <div className="absolute inset-0 flex items-end">
-              {monthlySalesData.map((data, index) => (
-                <div key={index} className="flex-1 flex flex-col items-center">
+              {sales?.map((data, index) => (
+                <div
+                  key={index}
+                  className="flex-1 flex flex-col items-center justify-end h-full"
+                >
                   <div
                     className="w-full max-w-[30px] bg-blue-500 rounded-t-sm mx-auto"
                     style={{
-                      height: `${(data.sales / maxSales) * 100}%`,
+                      height: `${(data.sales * 100) / totalRevenue}%`,
                     }}
                   ></div>
                   <div className="text-xs text-gray-600 mt-2">{data.month}</div>
@@ -92,21 +97,21 @@ export const SalesCharts: React.FC<SalesChartsProps> = ({
               Sales by Category
             </h2>
             <div className="space-y-4">
-              {categorySalesData.map((category, index) => (
+              {totalSalesByCategory?.map((data, index) => (
                 <div key={index}>
                   <div className="flex justify-between items-center mb-1">
                     <span className="text-sm font-medium text-gray-700">
-                      {category.category}
+                      {data.category}
                     </span>
                     <span className="text-sm text-gray-600">
-                      ${(category.sales / 1000).toFixed(1)}k
+                      ${(data.sales / 1000).toFixed(1)}k
                     </span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
                       className="h-2 rounded-full bg-blue-500"
                       style={{
-                        width: `${category.percentage}%`,
+                        width: `${(data.sales * 100) / totalRevenue}%`,
                       }}
                     ></div>
                   </div>
@@ -121,13 +126,13 @@ export const SalesCharts: React.FC<SalesChartsProps> = ({
                 <div className="p-3 bg-gray-50 rounded-lg">
                   <div className="text-sm text-gray-500">Total Revenue</div>
                   <div className="text-xl font-semibold text-gray-900 mt-1">
-                    $298,800
+                    ${totalRevenue.toLocaleString()}
                   </div>
                 </div>
                 <div className="p-3 bg-gray-50 rounded-lg">
                   <div className="text-sm text-gray-500">Total Orders</div>
                   <div className="text-xl font-semibold text-gray-900 mt-1">
-                    2,840
+                    {totalOrders.toLocaleString()}
                   </div>
                 </div>
               </div>

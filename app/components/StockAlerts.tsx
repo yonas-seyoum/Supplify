@@ -9,11 +9,8 @@ interface StockAlertsProps {
 export const StockAlerts: React.FC<StockAlertsProps> = ({
   compact = false,
 }) => {
-  const { products } = useDashboardContext();
-
-  const lowStockItems = products.filter(
-    (item) => item.quantity <= item.threshold
-  );
+  const { products, lowStockItems } = useDashboardContext();
+  if (!products) return null;
 
   const [sortColumn, setSortColumn] = useState("name");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
@@ -30,12 +27,12 @@ export const StockAlerts: React.FC<StockAlertsProps> = ({
   const filteredItems = lowStockItems
     .filter((item) => {
       if (alertFilter === "all") return true;
-      if (alertFilter === "critical" && item.quantity <= item.threshold / 2)
+      if (alertFilter === "critical" && item.quantity <= item.threshold)
         return true;
       if (
         alertFilter === "warning" &&
-        item.quantity > item.threshold / 2 &&
-        item.quantity <= item.threshold
+        item.quantity > item.threshold &&
+        item.quantity <= item.threshold * 2
       )
         return true;
       return false;
@@ -114,8 +111,8 @@ export const StockAlerts: React.FC<StockAlertsProps> = ({
             </thead>
             <tbody className="divide-y divide-gray-200">
               {displayItems.map((item) => {
-                const percentage = 1 * 100; //
-                const isCritical = item.quantity <= item.threshold / 2;
+                const percentage = (item.quantity * 100) / 200; //
+                const isCritical = item.quantity <= item.threshold;
                 return (
                   <tr key={item.id} className="hover:bg-gray-50">
                     <td className="py-3 px-4">
@@ -138,7 +135,8 @@ export const StockAlerts: React.FC<StockAlertsProps> = ({
                               isCritical ? "text-red-600" : "text-orange-500"
                             }`}
                           >
-                            {item.quantity / 12} {/*item.maxQuantity*/}
+                            {(item.quantity / 12).toFixed(3)}{" "}
+                            {/*item.maxQuantity*/}
                           </span>
                           <span
                             className={`text-xs px-2 py-0.5 rounded-full ${
