@@ -7,12 +7,10 @@ import { Product } from "@/app/utils/constants/products";
 interface AddProductModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: any) => void;
 }
 export const AddProductModal: React.FC<AddProductModalProps> = ({
   isOpen,
   onClose,
-  onSubmit,
 }) => {
   const [formData, setFormData] = useState<Omit<Product, "id">>({
     name: "",
@@ -23,15 +21,9 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
     threshold: 0,
     barcode: 0,
   });
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(formData);
-    onClose();
-  };
+  const { isAddingEntity, addProduct } = useDashboardContext();
 
-  const { addProduct } = useDashboardContext();
-
-  const handleAddProduct = () => {
+  const handleAddProduct = async () => {
     try {
       addProduct({
         id: 0,
@@ -46,6 +38,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
     } catch (error: any) {
       throw new Error(error.message);
     } finally {
+      onClose();
     }
   };
 
@@ -70,7 +63,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
               <h3 className="text-lg font-semibold leading-6 text-gray-900">
                 Add New Product
               </h3>
-              <form onSubmit={handleSubmit} className="mt-6 space-y-6">
+              <form className="mt-6 space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
@@ -217,8 +210,13 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                     className="inline-flex w-full items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
                     onClick={handleAddProduct}
                   >
-                    <Loader2 className="px-2 animate-spin" />
-                    Add Product
+                    {isAddingEntity ? (
+                      <>
+                        <Loader2 className="animate-spin" /> <>Adding Product</>
+                      </>
+                    ) : (
+                      <>Add Product</>
+                    )}
                   </button>
                   <button
                     type="button"
