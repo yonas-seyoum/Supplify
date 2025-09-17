@@ -12,8 +12,17 @@ import Card from "../components/Card";
 export default function Dashboard() {
   const { header, dayFilters, exportLabel, salesOverview, stockAlerts } =
     DashboardTypography;
-  const { dashboardData } = useDashboardContext();
-  const { numberOfSuppliers, numerOfProducts, lowStockItems } = dashboardData;
+
+  const { products, suppliers, salesData, lowStockItems } =
+    useDashboardContext();
+
+  const { sales, totalRevenue } = salesData;
+
+  const AverageMonthlySales =
+    sales.map((s) => s.sales).reduce((a, b) => a + b, 0) / sales.length;
+
+  const numberOfSuppliers = suppliers.length;
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -33,21 +42,29 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card
           title="Total Products"
-          value={numerOfProducts}
+          value={products.length}
           icon={stats[0].icon}
         />
         <Card
           title="Low Stock Items"
-          value={lowStockItems}
+          value={lowStockItems.length}
           icon={stats[1].icon}
         />
-        <Card title="Monthly Sales" value={`$${48294}`} icon={stats[2].icon} />
+        <Card
+          title="Average Monthly Sales"
+          value={`$${AverageMonthlySales.toLocaleString()}`}
+          icon={stats[2].icon}
+        />
         <Card
           title="Active Suppliers"
           value={numberOfSuppliers}
           icon={stats[3].icon}
         />
-        <Card title="Revenue" value={`$${12894}`} icon={stats[4].icon} />
+        <Card
+          title="Revenue"
+          value={`$${totalRevenue.toLocaleString()}`}
+          icon={stats[4].icon}
+        />
         <Card title="Orders" value={562} icon={stats[5].icon} />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
