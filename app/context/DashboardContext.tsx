@@ -1,21 +1,20 @@
 "use client";
 
-import React, { createContext, useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { Product } from "../utils/constants/products";
 import { Supplier } from "../utils/constants/suppliers";
+import { SalesData } from "../utils/constants/sales";
 
 interface DashboardContext {
+  isAddingEntity: boolean;
   products: Product[];
+  lowStockItems: Product[];
   addProduct: (product: Product) => void;
   deleteProduct: (id: number) => void;
   suppliers: Supplier[];
   addSupplier: (supplier: Supplier) => void;
   deleteSupplier: (id: number) => void;
-  dashboardData: {
-    numerOfProducts: number;
-    numberOfSuppliers: number;
-    lowStockItems: number;
-  };
+  salesData: SalesData;
 }
 
 export const DashboardContext = createContext<DashboardContext | undefined>(
@@ -37,18 +36,8 @@ export default function DashboardContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [products, setProducts] = React.useState<Product[]>([
-    {
-      id: 0,
-      name: "",
-      description: "",
-      quantity: 0,
-      category: "Electronics",
-      threshold: 0,
-      price: 0,
-      barcode: 0,
-    },
-  ]);
+  const [isAddingEntity, setIsAddingEntity] = useState<boolean>(false);
+  const [products, setProducts] = React.useState<Product[]>([]);
 
   const [suppliers, setSuppliers] = React.useState<Supplier[]>([
     {
@@ -70,14 +59,12 @@ export default function DashboardContextProvider({
     },
   ]);
 
-  const dashboardData = {
-    numerOfProducts: products.length,
-    numberOfSuppliers: suppliers.length,
-    lowStockItems: products.filter((p) => p.quantity <= p.threshold).length,
-  };
+  const [salesData, setSalesData] = useState<SalesData>({} as SalesData);
+  const [lowStockItems, setLowStockItems] = useState<Product[]>([]);
 
   const addProduct = async (product: Product) => {
     try {
+      setIsAddingEntity(true);
       await fetch("/api/products", {
         method: "POST",
         headers: {
@@ -89,6 +76,7 @@ export default function DashboardContextProvider({
     } catch (error) {
       console.error("Failed to add product:", error);
     }
+    setIsAddingEntity(false);
   };
 
   const deleteProduct = async (id: number) => {
@@ -116,6 +104,13 @@ export default function DashboardContextProvider({
     });
     const data = await res.json();
     setProducts(data);
+
+    const lowStockItems = data.filter(
+      (item: Product) =>
+        item.quantity <= item.threshold ||
+        (item.quantity > item.threshold && item.quantity <= item.threshold * 2)
+    );
+    setLowStockItems(lowStockItems);
   };
 
   const addSupplier = async (supplier: Supplier) => {
@@ -159,21 +154,36 @@ export default function DashboardContextProvider({
     setSuppliers(data);
   };
 
+  const fetchSales = async () => {
+    const res = await fetch("/api/sales", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+
+    setSalesData(data);
+  };
+
   useEffect(() => {
     fetchProducts();
     fetchSuppliers();
+    fetchSales();
   }, []);
 
   return (
     <DashboardContext.Provider
       value={{
+        isAddingEntity,
         products,
         addProduct,
         deleteProduct,
         suppliers,
         addSupplier,
         deleteSupplier,
-        dashboardData,
+        salesData,
+        lowStockItems,
       }}
     >
       {children}
