@@ -17,10 +17,12 @@ export default function Dashboard() {
   const {
     productsData: { products, lowStockItems, isProductsLoading },
     suppliersData: { suppliers, isSuppliersLoading },
-    salesData: { salesData, salesError, salesIsLoading },
+    salesData: {
+      salesData: { sales, totalRevenue, totalOrders },
+      salesError,
+      salesIsLoading,
+    },
   } = useDashboardContext();
-
-  const { sales, totalRevenue } = salesData;
 
   const AverageMonthlySales =
     sales?.map((s) => s.sales).reduce((a, b) => a + b, 0) / sales?.length;
@@ -73,7 +75,11 @@ export default function Dashboard() {
           value={`$${totalRevenue?.toLocaleString()}`}
           icon={stats[4].icon}
         />
-        <Card title="Orders" value={562} icon={stats[5].icon} />
+        <Card
+          title="Orders"
+          value={totalOrders.toLocaleString()}
+          icon={stats[5].icon}
+        />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-sm border border-gray-100">
