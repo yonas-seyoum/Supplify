@@ -12,9 +12,11 @@ export const AddSupplierModal: React.FC<AddSupplierModalProps> = ({
   onClose,
   onSubmit,
 }) => {
-  const { addSupplier } = useDashboardContext();
+  const {
+    suppliersData: { addSupplier },
+  } = useDashboardContext();
 
-  const [formData, setFormData] = useState<Omit<Supplier, 'id'>>({
+  const [formData, setFormData] = useState<Omit<Supplier, "id">>({
     name: "",
     contact: "",
     email: "",
@@ -114,7 +116,11 @@ export const AddSupplierModal: React.FC<AddSupplierModalProps> = ({
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          category: e.target.value as "Electronics" | "Furniture" | "Health" | "Beauty",
+                          category: e.target.value as
+                            | "Electronics"
+                            | "Furniture"
+                            | "Health"
+                            | "Beauty",
                         })
                       }
                     >

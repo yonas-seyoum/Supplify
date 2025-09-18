@@ -21,7 +21,10 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
     threshold: 0,
     barcode: 0,
   });
-  const { isAddingEntity, addProduct } = useDashboardContext();
+  const {
+    productsData: { addProduct },
+    isAddingEntity,
+  } = useDashboardContext();
 
   const handleAddProduct = async () => {
     try {
