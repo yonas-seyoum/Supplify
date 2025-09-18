@@ -4,14 +4,31 @@ import {
   setDoc,
   deleteDoc,
   doc,
+  where,
+  query,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { NextRequest, NextResponse } from "next/server";
+import { adminAuth } from "@/lib/firebaseAdmin";
 
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader) {
+    return NextResponse.json(
+      { success: false, message: "No token" },
+      { status: 401 }
+    );
+  }
 
-export async function GET(){
-    try {
-    const productsCol = collection(db, "suppliers");
+  const token = authHeader.split(" ")[1];
+  const decoded = await adminAuth.verifyIdToken(token);
+  const uid = decoded.uid;
+
+  try {
+    const productsCol = query(
+      collection(db, "suppliers"),
+      where("userId", "==", uid)
+    );
     const productSnapshot = await getDocs(productsCol);
     const productList = productSnapshot.docs.map((doc) => doc.data());
     return NextResponse.json(productList);
@@ -23,7 +40,18 @@ export async function GET(){
   }
 }
 
-export async function POST(request: NextRequest){
+export async function POST(request: NextRequest) {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader) {
+    return NextResponse.json(
+      { success: false, message: "No token" },
+      { status: 401 }
+    );
+  }
+
+  const token = authHeader.split(" ")[1];
+  const decoded = await adminAuth.verifyIdToken(token);
+  const uid = decoded.uid;
   try {
     const { name, contact, email, phone, address, category, status } =
       await request.json();
@@ -31,6 +59,7 @@ export async function POST(request: NextRequest){
     const supplierRef = doc(collection(db, "suppliers"));
     
     const newProduct = {
+      userId: uid,
       id: supplierRef.id,
       name,
       contact,

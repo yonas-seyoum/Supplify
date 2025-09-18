@@ -1,9 +1,24 @@
 import { db } from "@/lib/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { adminAuth } from "@/lib/firebaseAdmin";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader) {
+    return NextResponse.json(
+      { success: false, message: "No token" },
+      { status: 401 }
+    );
+  }
+
+  const token = authHeader.split(" ")[1];
+  const decoded = await adminAuth.verifyIdToken(token);
+  const uid = decoded.uid;
+
   try {
-    const salesSnapshot = await getDocs(collection(db, "sales"));
+    const q = query(collection(db, "sales"), where("userId", "==", uid));
+    const salesSnapshot = await getDocs(q);
     const salesList = salesSnapshot.docs.map((doc) => doc.data());
 
     const salesData = {
