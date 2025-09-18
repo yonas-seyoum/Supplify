@@ -3,10 +3,12 @@ import { X, Search, Plus, Minus } from "lucide-react";
 interface ProcessOrderModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSubmit: (data: any) => void;
 }
 export const ProcessOrderModal: React.FC<ProcessOrderModalProps> = ({
   isOpen,
   onClose,
+  onSubmit,
 }) => {
   const [orderType, setOrderType] = useState<"inbound" | "outbound">(
     "outbound"
@@ -35,10 +37,15 @@ export const ProcessOrderModal: React.FC<ProcessOrderModalProps> = ({
       name: "Smartphone",
       stock: 23,
     },
+    
   ];
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+    onSubmit({
+      type: orderType,
+      products: selectedProducts,
+      date: new Date(),
+    });
     onClose();
   };
   const addProduct = (product: { id: number; name: string }) => {

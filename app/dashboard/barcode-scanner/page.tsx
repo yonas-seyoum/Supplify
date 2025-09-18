@@ -179,7 +179,6 @@ export default function BarcodeScanner() {
       <AddProductModal
         isOpen={isAddProductModalOpen}
         onClose={handleAddProductModalState}
-        onSubmit={() => {}}
       />
       <ProcessOrderModal
         isOpen={isProcessOrderModalOpen}
