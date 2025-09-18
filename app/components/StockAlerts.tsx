@@ -12,12 +12,11 @@ export const StockAlerts: React.FC<StockAlertsProps> = ({
   const {
     productsData: { products, lowStockItems },
   } = useDashboardContext();
-  if (!products) return null;
-
+  
   const [sortColumn, setSortColumn] = useState("name");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [alertFilter, setAlertFilter] = useState("all");
-
+  
   const handleSort = (column: string) => {
     if (sortColumn === column) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
@@ -27,16 +26,16 @@ export const StockAlerts: React.FC<StockAlertsProps> = ({
     }
   };
   const filteredItems = lowStockItems
-    .filter((item) => {
-      if (alertFilter === "all") return true;
-      if (alertFilter === "critical" && item.quantity <= item.threshold)
-        return true;
-      if (
+  .filter((item) => {
+    if (alertFilter === "all") return true;
+    if (alertFilter === "critical" && item.quantity <= item.threshold)
+      return true;
+    if (
         alertFilter === "warning" &&
         item.quantity > item.threshold &&
         item.quantity <= item.threshold * 2
       )
-        return true;
+      return true;
       return false;
     })
     .sort((a, b) => {
@@ -45,9 +44,10 @@ export const StockAlerts: React.FC<StockAlertsProps> = ({
       if (a[column] > b[column]) return sortDirection === "asc" ? 1 : -1;
       return 0;
     });
-
-  const displayItems = compact ? filteredItems.slice(0, 4) : filteredItems;
-  return (
+    
+    const displayItems = compact ? filteredItems.slice(0, 4) : filteredItems;
+    if (!products) return null;
+    return (
     <div className="space-y-4">
       {!compact && (
         <div className="flex items-center justify-between">

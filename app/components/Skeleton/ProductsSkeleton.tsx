@@ -55,8 +55,8 @@ export default function ProductsSkeleton() {
               <th className="py-3 px-4 text-center font-medium">Actions</th>
             </tr>
           </thead>
-          {Array.from({ length: 5 }).map((_, index) => (
-            <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-gray-200">
+            {Array.from({ length: 5 }).map((_, index) => (
               <tr key={index} className="hover:bg-gray-50">
                 <td className="py-3 px-4 text-gray-800 font-medium">
                   <div className="skeleton h-6 w-full"></div>
@@ -80,8 +80,8 @@ export default function ProductsSkeleton() {
                   </div>
                 </td>
               </tr>
-            </tbody>
-          ))}
+            ))}
+          </tbody>
         </table>
       </div>
       <div className="p-4 border-t border-gray-200 flex items-center justify-between text-sm">
