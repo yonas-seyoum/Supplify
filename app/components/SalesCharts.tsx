@@ -128,13 +128,13 @@ export const SalesCharts: React.FC<SalesChartsProps> = ({
                 <div className="p-3 bg-gray-50 rounded-lg">
                   <div className="text-sm text-gray-500">Total Revenue</div>
                   <div className="text-xl font-semibold text-gray-900 mt-1">
-                    ${totalRevenue.toLocaleString()}
+                    ${totalRevenue?.toLocaleString()}
                   </div>
                 </div>
                 <div className="p-3 bg-gray-50 rounded-lg">
                   <div className="text-sm text-gray-500">Total Orders</div>
                   <div className="text-xl font-semibold text-gray-900 mt-1">
-                    {totalOrders.toLocaleString()}
+                    {totalOrders?.toLocaleString()}
                   </div>
                 </div>
               </div>
