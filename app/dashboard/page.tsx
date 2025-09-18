@@ -77,7 +77,7 @@ export default function Dashboard() {
         />
         <Card
           title="Orders"
-          value={totalOrders.toLocaleString()}
+          value={totalOrders?.toLocaleString()}
           icon={stats[5].icon}
         />
       </div>
