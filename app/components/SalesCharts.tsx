@@ -12,9 +12,11 @@ export const SalesCharts: React.FC<SalesChartsProps> = ({
 }) => {
   const [dateRange, setDateRange] = useState("30days");
 
-  const { salesData } = useDashboardContext();
+  const {
+    salesData: { salesData },
+  } = useDashboardContext();
   const { sales, totalRevenue, totalOrders, totalSalesByCategory } = salesData;
-  
+
   return (
     <div className="space-y-6">
       {!compact && (

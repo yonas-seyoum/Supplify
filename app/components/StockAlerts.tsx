@@ -9,7 +9,9 @@ interface StockAlertsProps {
 export const StockAlerts: React.FC<StockAlertsProps> = ({
   compact = false,
 }) => {
-  const { products, lowStockItems } = useDashboardContext();
+  const {
+    productsData: { products, lowStockItems },
+  } = useDashboardContext();
   if (!products) return null;
 
   const [sortColumn, setSortColumn] = useState("name");

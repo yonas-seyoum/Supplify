@@ -13,7 +13,10 @@ export default function Products() {
   const handleAddProductModalState = () => {
     setIsAddProductModalOpen(!isAddProductModalOpen);
   };
-  const { products } = useDashboardContext();
+  const {
+    productsData: { isProductsLoading, products },
+  } = useDashboardContext();
+  const loading = isProductsLoading && products.length === 0;
 
   return (
     <div className="space-y-6">
@@ -27,7 +30,7 @@ export default function Products() {
           Add Product
         </button>
       </div>
-      {products ? <ProductsTable /> : <ProductsSkeleton />}
+      {!loading ? <ProductsTable /> : <ProductsSkeleton />}
       <AddProductModal
         isOpen={isAddProductModalOpen}
         onClose={handleAddProductModalState}

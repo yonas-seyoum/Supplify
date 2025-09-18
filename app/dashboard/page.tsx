@@ -8,20 +8,28 @@ import { stats } from "../utils/constants/dashboard";
 import { DashboardTypography } from "../utils/constants/dashboard";
 import { useDashboardContext } from "../context/DashboardContext";
 import Card from "../components/Card";
+import DashboardSkeleton from "../components/Skeleton/DashboardSkeleton";
 
 export default function Dashboard() {
   const { header, dayFilters, exportLabel, salesOverview, stockAlerts } =
     DashboardTypography;
 
-  const { products, suppliers, salesData, lowStockItems } =
-    useDashboardContext();
+  const {
+    productsData: { products, lowStockItems, isProductsLoading },
+    suppliersData: { suppliers, isSuppliersLoading },
+    salesData: { salesData, salesError, salesIsLoading },
+  } = useDashboardContext();
 
   const { sales, totalRevenue } = salesData;
 
   const AverageMonthlySales =
-    sales.map((s) => s.sales).reduce((a, b) => a + b, 0) / sales.length;
+    sales?.map((s) => s.sales).reduce((a, b) => a + b, 0) / sales?.length;
 
   const numberOfSuppliers = suppliers.length;
+
+  const loading = isProductsLoading || isSuppliersLoading || salesIsLoading;
+
+  if (loading) return <DashboardSkeleton />;
 
   return (
     <div className="space-y-8">
@@ -62,7 +70,7 @@ export default function Dashboard() {
         />
         <Card
           title="Revenue"
-          value={`$${totalRevenue.toLocaleString()}`}
+          value={`$${totalRevenue?.toLocaleString()}`}
           icon={stats[4].icon}
         />
         <Card title="Orders" value={562} icon={stats[5].icon} />

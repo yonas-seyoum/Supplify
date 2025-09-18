@@ -5,7 +5,9 @@ import { Search, Plus, Mail, Phone, MapPin, Edit, Trash2 } from "lucide-react";
 import { AddSupplierModal } from "@/app/components/Modal/AddSupplierModal";
 import { useDashboardContext } from "@/app/context/DashboardContext";
 export default function SupplierTable() {
-  const { suppliers, deleteSupplier } = useDashboardContext();
+  const {
+    suppliersData: { suppliers, deleteSupplier },
+  } = useDashboardContext();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 

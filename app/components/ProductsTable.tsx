@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { Search, Filter, ArrowUpDown, Edit, Trash2 } from "lucide-react";
 import { useDashboardContext } from "@/app/context/DashboardContext";
-import ProductsSkeleton from "./Skeleton/ProductsSkeleton";
 
 export default function ProductsTable() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -11,7 +10,9 @@ export default function ProductsTable() {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [categoryFilter, setCategoryFilter] = useState("all");
 
-  const { products, deleteProduct } = useDashboardContext();
+  const {
+    productsData: { products, deleteProduct },
+  } = useDashboardContext();
 
   const filteredProducts = products
     .filter(
