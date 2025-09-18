@@ -1,28 +1,34 @@
 import { useState, useEffect } from "react";
 import { Product } from "../utils/constants/products";
+import { useAuthContext } from "../context/AuthContext";
 
 export default function useProducts() {
   const [products, setProducts] = useState<Product[]>([]);
   const [lowStockItems, setLowStockItems] = useState<Product[]>([]);
-  const [isProductsLoading, setIsProductsLoading] = useState<boolean>(false);
+  const [isProductsLoading, setIsProductsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const { user } = useAuthContext();
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [user]);
 
   const addProduct = async (product: Product) => {
+    setIsProductsLoading(true);
     try {
       await fetch("/api/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
         },
         body: JSON.stringify(product),
       });
       fetchProducts();
     } catch (error) {
       console.error("Failed to add product:", error);
+    } finally {
+      setIsProductsLoading(false);
     }
   };
 
@@ -35,7 +41,6 @@ export default function useProducts() {
         },
         body: JSON.stringify({ id }),
       });
-
       fetchProducts();
     } catch (error) {
       console.error("Failed to delete product:", error);
@@ -43,12 +48,13 @@ export default function useProducts() {
   };
 
   const fetchProducts = async () => {
+    if (!user) return;
     try {
-      setIsProductsLoading(true);
       const res = await fetch("/api/products", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
         },
       });
       const data = await res.json();
