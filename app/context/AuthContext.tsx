@@ -26,6 +26,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  token:string
 }
 
 export const AuthContext = createContext<AuthContext | undefined>(undefined);
@@ -56,11 +57,17 @@ export default function AuthContextProvider({
         setUser(null);
         return;
       }
-      setUser({
-        id: currentUser.uid,
-        name: currentUser.displayName || "Unknown",
-        email: currentUser.email || "Unknown",
-      });
+
+      const fetchUser = async () => {
+        const name = currentUser?.displayName || "";
+        const id = currentUser?.uid || "";
+        const email = currentUser?.email || "";
+        const token = await currentUser.getIdToken();
+
+        setUser({ id, name, email ,token});
+      };
+
+      fetchUser();
     });
     return () => unsubscribe();
   }, []);
