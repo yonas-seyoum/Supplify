@@ -98,7 +98,7 @@ export default function SignupPage() {
                   autoComplete="email"
                   required
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="you@example.com"
+                  placeholder="user@gmail.com"
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
@@ -122,7 +122,6 @@ export default function SignupPage() {
                   type="password"
                   required
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="••••••••"
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
@@ -146,7 +145,6 @@ export default function SignupPage() {
                   type="password"
                   required
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="••••••••"
                   onChange={(e) =>
                     setFormData({
                       ...formData,
