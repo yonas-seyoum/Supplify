@@ -29,7 +29,7 @@ export default function WhyChooseSection() {
             </div>
             <div className="mt-10">
               <button className="px-6 py-3 bg-[#2563EB] hover:bg-blue-700 text-white font-medium rounded-lg transition duration-300 shadow-lg shadow-blue-500/30">
-                Start Free Trial
+                Discover Supplify
               </button>
             </div>
           </div>
