@@ -1,4 +1,5 @@
 import { TrendingUpIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -22,9 +23,12 @@ export default function HeroSection() {
               </p>
             </div>
             <div className="flex flex-wrap gap-4">
-              <button className="px-8 py-4 bg-[#2563EB] hover:bg-blue-700 text-white font-medium rounded-lg transition duration-300 shadow-lg shadow-blue-500/30">
+              <Link
+                href="/auth/signin"
+                className="cursor-default px-8 py-4 bg-[#2563EB] hover:bg-blue-700 text-white font-medium rounded-lg transition duration-300 shadow-lg shadow-blue-500/30"
+              >
                 Get Started
-              </button>
+              </Link>
               <button className="px-8 py-4 bg-white text-gray-700 font-medium rounded-lg border border-gray-200 hover:border-gray-300 transition duration-300">
                 Book a Demo
               </button>
