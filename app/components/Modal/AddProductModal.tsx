@@ -22,11 +22,13 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
     barcode: 0,
   });
   const {
-    productsData: { addProduct },
+    productsData: { addProduct, isProductsLoading },
     isAddingEntity,
   } = useDashboardContext();
+  const [loading, setLoading] =useState(false)
 
   const handleAddProduct = async () => {
+    setLoading(true)
     try {
       addProduct({
         id: 0,
@@ -40,8 +42,9 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
       });
     } catch (error: any) {
       throw new Error(error.message);
-    } finally {
-      onClose();
+    } 
+    finally{
+      setLoading(false)
     }
   };
 
@@ -213,7 +216,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                     className="inline-flex w-full items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
                     onClick={handleAddProduct}
                   >
-                    {isAddingEntity ? (
+                    {loading ? (
                       <>
                         <Loader2 className="animate-spin" /> <>Adding Product</>
                       </>
