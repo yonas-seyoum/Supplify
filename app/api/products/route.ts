@@ -72,7 +72,15 @@ export async function POST(request: Request) {
 
     await setDoc(productRef, newProduct);
 
-    return NextResponse.json({ success: true, id: productRef.id });
+    const productsCol = query(
+      collection(db, "products"),
+      where("userId", "==", uid)
+    );
+
+    const productSnapshot = await getDocs(productsCol);
+    const productList = productSnapshot.docs.map((doc) => doc.data());
+
+    return NextResponse.json(productList);
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },

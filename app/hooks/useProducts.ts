@@ -16,7 +16,7 @@ export default function useProducts() {
   const addProduct = async (product: Product) => {
     setIsProductsLoading(true);
     try {
-      await fetch("/api/products", {
+      const res = await fetch("/api/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -24,7 +24,15 @@ export default function useProducts() {
         },
         body: JSON.stringify(product),
       });
-      fetchProducts();
+      const data = await res.json();
+            const lowStockItems = data.filter(
+              (item: Product) =>
+                item.quantity <= item.threshold ||
+                (item.quantity > item.threshold &&
+                  item.quantity <= item.threshold * 2)
+            );
+      setProducts(data);
+      setLowStockItems(lowStockItems)
     } catch (error) {
       console.error("Failed to add product:", error);
     } finally {
