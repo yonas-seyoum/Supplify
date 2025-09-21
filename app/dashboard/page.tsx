@@ -37,7 +37,7 @@ export default function Dashboard() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-800">{header}</h1>
-        <div className="flex space-x-2">
+        <div className="md:flex hidden space-x-2">
           <select className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option>{dayFilters[0]}</option>
             <option>{dayFilters[1]}</option>
@@ -49,7 +49,7 @@ export default function Dashboard() {
           </button>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card
           title="Total Products"
           value={products.length}
@@ -82,7 +82,7 @@ export default function Dashboard() {
         />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+        <div className="md:block hidden lg:col-span-2 bg-white p-6 rounded-lg shadow-sm border border-gray-100">
           <h2 className="text-lg font-semibold text-gray-800 mb-4">
             {salesOverview}
           </h2>

@@ -17,13 +17,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         setCollapsed={setSidebarCollapsed}
       />
       <main
-        className={`flex-1 overflow-auto transition-all duration-200 ${
-          sidebarCollapsed ? "ml-16" : "ml-64"
-        }`}
+        className={`flex-1 overflow-auto transition-all duration-200
+      md:${sidebarCollapsed ? "ml-16" : "ml-64"} ml-0`}
       >
-        <div className="p-6">
-          <DashboardContextProvider>{children}</DashboardContextProvider>
-        </div>
+        <DashboardContextProvider>
+          <div className="md:p-6 py-24 px-6 w-full">{children}</div>
+        </DashboardContextProvider>
       </main>
     </div>
   );

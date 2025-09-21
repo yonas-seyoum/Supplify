@@ -12,11 +12,9 @@ export const StockAlerts: React.FC<StockAlertsProps> = ({
   const {
     productsData: { products, lowStockItems },
   } = useDashboardContext();
-  
   const [sortColumn, setSortColumn] = useState("name");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [alertFilter, setAlertFilter] = useState("all");
-  
   const handleSort = (column: string) => {
     if (sortColumn === column) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
@@ -26,16 +24,16 @@ export const StockAlerts: React.FC<StockAlertsProps> = ({
     }
   };
   const filteredItems = lowStockItems
-  .filter((item) => {
-    if (alertFilter === "all") return true;
-    if (alertFilter === "critical" && item.quantity <= item.threshold)
-      return true;
-    if (
+    .filter((item) => {
+      if (alertFilter === "all") return true;
+      if (alertFilter === "critical" && item.quantity <= item.threshold)
+        return true;
+      if (
         alertFilter === "warning" &&
         item.quantity > item.threshold &&
         item.quantity <= item.threshold * 2
       )
-      return true;
+        return true;
       return false;
     })
     .sort((a, b) => {
@@ -44,16 +42,15 @@ export const StockAlerts: React.FC<StockAlertsProps> = ({
       if (a[column] > b[column]) return sortDirection === "asc" ? 1 : -1;
       return 0;
     });
-    
-    const displayItems = compact ? filteredItems.slice(0, 4) : filteredItems;
-    if (!products) return null;
-    return (
+  const displayItems = compact ? filteredItems.slice(0, 4) : filteredItems;
+  if (!products) return null;
+  return (
     <div className="space-y-4">
       {!compact && (
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-gray-800">Stock Alerts</h1>
           <div className="flex items-center gap-2">
-            <Filter size={18} className="text-gray-500" />
+            <Filter size={18} className="hidden md:block text-gray-500" />
             <select
               className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={alertFilter}

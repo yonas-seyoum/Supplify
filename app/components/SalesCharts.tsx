@@ -22,7 +22,7 @@ export const SalesCharts: React.FC<SalesChartsProps> = ({
       {!compact && (
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-gray-800">Sales Analytics</h1>
-          <div className="flex items-center space-x-2">
+          <div className="hidden md:flex items-center space-x-2">
             <div className="relative">
               <div className="flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-md bg-white cursor-pointer">
                 <Calendar size={18} className="text-gray-500" />
